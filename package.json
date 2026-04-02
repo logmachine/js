@@ -1,0 +1,12 @@
+{
+  "name": "logmachine",
+  "version": "1.0.0",
+  "description": "Collaborative logging tool for developers (Client)",
+  "author": "Buffer Punk",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io-client": "^4.8.1",
+    "date-fns": "^4.1.0",
+    "axios": "^1.11.0"
+  }
+}
