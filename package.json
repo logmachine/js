@@ -1,12 +1,19 @@
 {
-  "name": "logmachine",
+  "name": "@bufferpunk/logmachine",
   "version": "1.0.0",
   "description": "Collaborative logging tool for developers (Client)",
   "author": "Buffer Punk",
   "license": "MIT",
+  "main": "./main.js",
+  "browser": "./browsers.umd.js",
+  "exports": {
+    ".": {
+      "import": "./browsers.umd.js",
+      "require": "./main.js"
+    }
+  },
   "dependencies": {
     "socket.io-client": "^4.8.1",
-    "date-fns": "^4.1.0",
-    "axios": "^1.11.0"
+    "node-fetch": "^3.3.0"
   }
 }

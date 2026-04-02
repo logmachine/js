@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
-import axios from "axios";
+import nodeFetch from "node-fetch";
 import { io } from "socket.io-client";
 import { fileURLToPath } from 'url';
 
@@ -79,12 +79,11 @@ class RequestsTransporter {
         }
         const logData = this.parseLog(formatted);
         if (logData) {
-          const res = await axios.post(
+          const res = await nodeFetch(
             `${this.central.url}${this.central.endpoint || "/api/logs"}?room=${
               this.central.room
             }`,
-            logData,
-            { headers: { "Content-Type": "application/json", ...(this.central.headers || {}) } }
+            { headers: { "Content-Type": "application/json", ...(this.central.headers || {}) }, method: "POST", body: JSON.stringify(logData) }
           );
           if (res.status !== 200) {
             throw new Error(`Failed to send log: ${res.data}`);
