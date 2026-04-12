@@ -1,11 +1,12 @@
 {
-  "name": "@bufferpunk/logmachine",
+  "name": "@logmachine/logmachine",
   "version": "1.0.0",
-  "description": "Collaborative logging tool for developers (Client)",
+  "description": "Beautiful collaborative logging tool for distributed developers",
   "author": "Buffer Punk",
   "license": "MIT",
   "main": "./main.js",
   "browser": "./browsers.umd.js",
+  "keywords": ["log", "logger", "logging", "debug", "collaborative", "tool", "developers", "centralized", "bufferpunk", "logmachine"],
   "exports": {
     ".": {
       "import": "./browsers.umd.js",

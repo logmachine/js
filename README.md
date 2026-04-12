@@ -33,7 +33,7 @@ npm install @bufferpunk/logmachine
 or using ES modules:
 
 ```javascript
-import { LogMachine, defaultLogger } from 'logmachine';
+import { LogMachine, defaultLogger } from '@bufferpunk/logmachine';
 ```
 
 ### Browser
@@ -54,7 +54,7 @@ The bundle exposes `window.LogMachine` and `window.defaultLogger` globally.
 ### Basic Setup (Node.js)
 
 ```javascript
-import { LogMachine } from 'logmachine';
+import { LogMachine } from '@bufferpunk/logmachine';
 
 const logger = new LogMachine('myapp', { debug_level: 0 });
 
@@ -91,7 +91,7 @@ logger.warning('This is a warning message.');
 You can use the default logger with central logging pointing to the public LogMachine server:
 
 ```javascript
-import { defaultLogger } from './main.js';
+import { defaultLogger } from '@bufferpunk/logmachine';
 
 const logger = defaultLogger;
 logger.info('This log is sent to the LogMachine central server!');
@@ -310,7 +310,7 @@ new LogMachine(name, {
 ### Example 1: Simple Local Logging
 
 ```javascript
-import { LogMachine } from './main.js';
+import { LogMachine } from '@bufferpunk/logmachine';
 
 const logger = new LogMachine('myapp');
 logger.info('Application started');
@@ -321,7 +321,7 @@ logger.warning('Be careful!');
 ### Example 2: Centralized Team Logging
 
 ```javascript
-import { LogMachine } from './main.js';
+import { LogMachine } from '@bufferpunk/logmachine';
 
 const logger = new LogMachine('production', {
   central: {
@@ -371,7 +371,7 @@ MIT License
 
 Mugabo Gusenga
 [logmachine.bufferpunk.com](https://logmachine.bufferpunk.com)
-[GitHub](https://github.com/logmachine/js)
+[GitHub](https://github.com/logmachine)
 
 ---
 
