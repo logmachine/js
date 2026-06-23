@@ -18,7 +18,7 @@ Works in **Node.js** and **browsers** with a single codebase!
 - 📦 **Simple JSON output** for web dashboards or collectors
 - 🧽 Strips ANSI escape codes from logs for clean parsing
 - 🌐 **Dual runtime support**: Node.js and browser environments
-- 🧠 Automatically resolves usernames and stores them persistently
+- 🧠 Automatically persists usernames and auth tokens for central logging
 
 ---
 
@@ -76,7 +76,7 @@ logger.warning('This is a warning message.');
   const lm = new LogMachine('my_logger', {
     debug_level: 0,
     central: {
-      url: 'https://logmachine.bufferpunk.com',
+      url: 'https://logmachine.org',
       room: 'public',
     },
   });
@@ -219,7 +219,7 @@ Sends logs via HTTP POST to your central server:
 ```javascript
 const logger = new LogMachine('app', {
   central: {
-    url: 'https://logmachine.bufferpunk.com',
+    url: 'https://logmachine.org',
     room: 'public',
     endpoint: '/api/logs',
   },
@@ -233,7 +233,7 @@ For real-time log streaming via WebSocket:
 ```javascript
 const logger = new LogMachine('app', {
   central: {
-    url: 'https://logmachine.bufferpunk.com',
+    url: 'https://logmachine.org',
     room: 'public',
     socketio: true,
     socketio_path: '/api/socket.io/',
@@ -248,26 +248,37 @@ const logger = new LogMachine('app', {
 To use Socket.IO, your central server must support these events:
 
 * `log`: Receives log payloads: `{ room: string, data: object }`
-* `GET /api/get_username?base=localname`: Returns `{ "username": "..." }`
 
 For HTTP, implement:
 
 * `POST /api/logs?room=<room>`: Accepts JSON log payload
-* `GET /api/get_username?base=<localname>`: Returns `{ "username": "..." }`
+* `POST /api/auth/device/start`: Starts device-flow login and returns `device_code`, `user_code`, `verification_uri_complete`, and `interval`
+* `POST /api/auth/device/poll`: Polls device-flow status and returns `approved`, `expired`, or a token payload
+* `GET /api/auth/session`: Returns the logged-in session user so the SDK can sync `lm_username`
 
 ---
 
 ## 🤖 Environment Variables
 
-* `CL_USERNAME`: Manually override detected username (Node.js)
-* `localStorage.CL_USERNAME`: Persisted username (Browser)
-* Automatically stored in `~/.cl_username` (Node.js) for persistent identity
+* `lm_username`: Persisted username used by formatters and central logging
+* `lm_auth_token`: Bearer token used for central requests when `Authorization` is not already set
+* `lm_expiry`: RFC3339 token expiry used to decide whether a cached login is still valid
+* `LM_API_KEY` / `lm_api_key`: Optional API key used by `logger.login(...)`
+* Browser fallback: `localStorage.lm_username`, `localStorage.lm_auth_token`, and `localStorage.lm_expiry`
+* Node.js stores these values in `~/.logmachine`
+
+The JS SDK now follows the same auth flow as the Python SDK:
+
+* `login(timeoutSeconds, apiKey)` uses a direct API key when available, otherwise falls back to device-flow login.
+* `logout()` clears the persisted credentials.
+* Central requests merge `lm_auth_token` into headers only when `Authorization` is not already set.
+* After login, the SDK attempts to sync `lm_username` from `/api/auth/session`.
 
 ---
 
 ## 🔐 Security
 
-* HTTP headers (e.g. `Authorization`) can be injected
+* HTTP headers (e.g. `Authorization`) can be injected; if omitted, `lm_auth_token` is used automatically
 * Central log transmission is fully customizable
 * Browser credentials can be controlled via `credentials` and `withCredentials` options
 
@@ -370,7 +381,7 @@ MIT License
 ## 🙋‍♂️ Author
 
 Mugabo Gusenga
-[logmachine.bufferpunk.com](https://logmachine.bufferpunk.com)
+[logmachine.org](https://logmachine.org)
 [GitHub](https://github.com/logmachine)
 
 ---
